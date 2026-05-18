@@ -4,8 +4,7 @@ class Categoria(models.Model):
     # Django crea el campo 'id' (INT) automáticamente
     nombre = models.CharField(max_length=50)       # Tipo VARCHAR
     descripcion = models.CharField(max_length=250) # Tipo VARCHAR
-    fecha_creacion = models.DateField()            # Tipo DATE
-
+    fecha_creacion = models.DateField(auto_now_add=True)
     def __str__(self):
         return self.nombre
 

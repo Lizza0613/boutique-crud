@@ -1,14 +1,17 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils import timezone
 from .models import Producto, Categoria
 
 # 1. MOSTRAR PRODUCTOS
 def index(request):
-    # Si no existen categorías, las creamos en automático
+    # Si no existen categorías, las creamos con TODOS los campos obligatorios de tu modelo
     if not Categoria.objects.exists():
-        Categoria.objects.create(nombre="Blusas")
-        Categoria.objects.create(nombre="Pantalones")
-        Categoria.objects.create(nombre="Vestidos")
-        Categoria.objects.create(nombre="Accesorios")
+        hoy = timezone.now().date()  # Obtiene la fecha de hoy (Tipo Date)
+        
+        Categoria.objects.create(nombre="Blusas", descripcion="Blusas y tops para dama", fecha_creacion=hoy)
+        Categoria.objects.create(nombre="Pantalones", descripcion="Pantalones y jeans", fecha_creacion=hoy)
+        Categoria.objects.create(nombre="Vestidos", descripcion="Vestidos de noche y casuales", fecha_creacion=hoy)
+        Categoria.objects.create(nombre="Accesorios", descripcion="Bolsos, joyería y más", fecha_creacion=hoy)
 
     productos = Producto.objects.all()
     categorias = Categoria.objects.all()
@@ -26,7 +29,7 @@ def crear_producto(request):
             precio=request.POST.get('precio'),
             stock=request.POST.get('stock')
         )
-    return redirect('index')  
+    return redirect('index')
 
 # 3. EDITAR PRODUCTO
 def editar_producto(request, id):
@@ -44,4 +47,4 @@ def editar_producto(request, id):
 def eliminar_producto(request, id):
     producto = get_object_or_404(Producto, id=id)
     producto.delete()
-    return redirect('index')  
+    return redirect('index')
