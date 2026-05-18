@@ -1,30 +1,17 @@
-from django.contrib.auth import get_user_model
-from django.apps import apps
+from django.urls import path
+from . import views  # Importa las vistas de tu aplicación de inventario
 
-User = get_user_model()
-
-try:
-    # 1. Crear el superusuario automático si no existe
-    if not User.objects.filter(username='admin').exists():
-        User.objects.create_superuser('admin', 'admin@boutique.com', 'Admin1234')
-        print("¡Superusuario creado con éxito!")
-
-    # 2. Crear las 5 categorías fijas automáticamente con sus IDs correctos
-    # Buscamos el modelo Categoria de forma segura para evitar errores de carga
-    Categoria = apps.get_model('inventario', 'Categoria') # Cambia 'inventario' si tu app se llama distinto
+urlpatterns = [
+    # 1. Página principal: Muestra el formulario y el closet virtual con la lista de prendas
+    path('', views.index, name='index'),
     
-    categorias_fijas = [
-        (1, "Blusas"),
-        (2, "Vestidos"),
-        (3, "Pantalones"),
-        (4, "Accesorios"),
-        (5, "Otros")
-    ]
+    # 2. Ruta para Añadir una nueva prenda (Acción del Formulario Rosa)
+    path('producto/crear/', views.crear_producto, name='crear_producto'),
     
-    for id_cat, nombre_cat in categorias_fijas:
-        if not Categoria.objects.filter(id=id_cat).exists():
-            Categoria.objects.create(id=id_cat, nombre=nombre_cat)
-            print(f"Categoría '{nombre_cat}' creada con éxito.")
-
-except Exception as e:
-    print(f"Aviso en la carga automática: {e}")
+    # 3. Ruta para Editar/Guardar cambios en línea (Acción de la Tabla Lavanda)
+    # <int:pk> o <int:id> pasa el número de ID del producto que se va a actualizar
+    path('producto/editar/<int:id>/', views.editar_producto, name='editar_producto'),
+    
+    # 4. Ruta para Eliminar una prenda (Acción del botón Borrar)
+    path('producto/eliminar/<int:id>/', views.eliminar_producto, name='eliminar_producto'),
+]
