@@ -1,11 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Producto, Categoria
 
-# 1. MOSTRAR PRODUCTOS
-def lista_productos(request):
+# 1. MOSTRAR PRODUCTOS (Cambiado a 'index' para que coincida con urls.py)
+def index(request):
     productos = Producto.objects.all()
     categorias = Categoria.objects.all()
-    # Cambia la línea de abajo para que quede solo 'index.html'
     return render(request, 'index.html', {'productos': productos, 'categorias': categorias})
 
 # 2. CREAR PRODUCTO
@@ -20,11 +19,11 @@ def crear_producto(request):
             precio=request.POST.get('precio'),
             stock=request.POST.get('stock')
         )
-    return redirect('lista_productos')
+    return redirect('index')  # Redirige a la página principal limpia
 
-# 3. EDITAR PRODUCTO
-def editar_producto(request, pk):
-    producto = get_object_or_404(Producto, pk=pk)
+# 3. EDITAR PRODUCTO (Cambiado 'pk' por 'id' para que coincida con urls.py)
+def editar_producto(request, id):
+    producto = get_object_or_404(Producto, id=id)
     if request.method == 'POST':
         categoria_id = request.POST.get('categoria')
         producto.categoria = get_object_or_404(Categoria, id=categoria_id)
@@ -32,10 +31,10 @@ def editar_producto(request, pk):
         producto.precio = request.POST.get('precio')
         producto.stock = request.POST.get('stock')
         producto.save()
-    return redirect('lista_productos')
+    return redirect('index')
 
-# 4. ELIMINAR PRODUCTO
-def eliminar_producto(request, pk):
-    producto = get_object_or_404(Producto, pk=pk)
+# 4. ELIMINAR PRODUCTO (Cambiado 'pk' por 'id' para que coincida con urls.py)
+def eliminar_producto(request, id):
+    producto = get_object_or_404(Producto, id=id)
     producto.delete()
-    return redirect('lista_productos')
+    return redirect('index')
