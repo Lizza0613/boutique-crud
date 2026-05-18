@@ -132,17 +132,16 @@
                         <label class="form-label fw-bold">Nombre del Artículo</label>
                         <input type="text" name="nombre" class="form-control" placeholder="Ej: Vestido Floral" required>
                     </div>
-                 <div class="col-md-3">
-                <label class="form-label fw-bold">Categoría</label>
-                <select name="categoria" class="form-select" required>
-                    <!-- Opciones fijas para que tu boutique funcione sin errores en internet -->
-                    <option value="1">Blusas</option>
-                    <option value="2">Vestidos</option>
-                    <option value="3">Pantalones</option>
-                    <option value="4">Accesorios</option>
-                    <option value="5">Otros</option>
-                </select>
-            </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Categoría</label>
+                        <select name="categoria" class="form-select" required>
+                            <option value="1">Blusas</option>
+                            <option value="2">Vestidos</option>
+                            <option value="3">Pantalones</option>
+                            <option value="4">Accesorios</option>
+                            <option value="5">Otros</option>
+                        </select>
+                    </div>
                     <div class="col-md-2">
                         <label class="form-label fw-bold">Precio ($)</label>
                         <input type="number" name="precio" class="form-control" placeholder="00.00" required>
@@ -179,37 +178,40 @@
                         <tbody>
                             {% for prod in productos %}
                             <tr>
+                                <!-- Para solucionar el error, toda la fila se convierte en un solo formulario bien estructurado -->
                                 <td class="ps-4 text-muted small">#{{ prod.id }}</td>
-                                <!-- Formulario por cada fila para poder EDITAR directamente -->
-                                <form action="{% url 'editar_producto' prod.id %}" method="POST">
-                                    {% csrf_token %}
-                                    <td>
-                                        <input type="text" name="nombre" value="{{ prod.nombre }}" class="form-control form-control-sm">
-                                    </td>
-                                    <td>
-                                        <select name="categoria" class="form-select form-select-sm">
-                                            {% for cat in categorias %}
-                                            <option value="{{ cat.id }}" {% if cat.id == prod.categoria.id %}selected{% endif %}>{{ cat.nombre }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <input type="number" name="precio" value="{{ prod.precio }}" class="form-control form-control-sm" style="width: 90px;">
-                                    </td>
-                                    <td>
-                                        <input type="number" name="stock" value="{{ prod.stock }}" class="form-control form-control-sm" style="width: 80px;">
-                                    </td>
-                                    <td class="text-center pe-4">
-                                        <!-- Botón de Actualizar -->
-                                        <button type="submit" class="btn btn-sm btn-update px-3">Guardar</button>
-                                        <!-- Botón de Eliminar -->
-                                        <a href="{% url 'eliminar_producto' prod.id %}" class="btn btn-sm btn-delete px-3">Borrar</a>
-                                    </td>
-                                </form>
+                                <td colspan="5">
+                                    <form action="{% url 'editar_producto' prod.id %}" method="POST" class="row g-2 align-items-center m-0">
+                                        {% csrf_token %}
+                                        <div class="col">
+                                            <input type="text" name="nombre" value="{{ prod.nombre }}" class="form-control form-control-sm">
+                                        </div>
+                                        <div class="col">
+                                            <select name="categoria" class="form-select form-select-sm">
+                                                <!-- Opciones fijas vinculadas de manera segura al ID guardado -->
+                                                <option value="1" {% if prod.categoria.id == 1 %}selected{% endif %}>Blusas</option>
+                                                <option value="2" {% if prod.categoria.id == 2 %}selected{% endif %}>Vestidos</option>
+                                                <option value="3" {% if prod.categoria.id == 3 %}selected{% endif %}>Pantalones</option>
+                                                <option value="4" {% if prod.categoria.id == 4 %}selected{% endif %}>Accesorios</option>
+                                                <option value="5" {% if prod.categoria.id == 5 %}selected{% endif %}>Otros</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-auto">
+                                            <input type="number" name="precio" value="{{ prod.precio }}" class="form-control form-control-sm" style="width: 90px;">
+                                        </div>
+                                        <div class="col-auto">
+                                            <input type="number" name="stock" value="{{ prod.stock }}" class="form-control form-control-sm" style="width: 80px;">
+                                        </div>
+                                        <div class="col-auto text-center pe-2">
+                                            <button type="submit" class="btn btn-sm btn-update px-3">Guardar</button>
+                                            <a href="{% url 'eliminar_producto' prod.id %}" class="btn btn-sm btn-delete px-3">Borrar</a>
+                                        </div>
+                                    </form>
+                                </td>
                             </tr>
                             {% empty %}
                             <tr>
-                                <td colspan="6" class="text-center py-5 text-muted invisible-row">🌸 Aún no hay prendas registradas en el closet virtual. 🌸</td>
+                                <td colspan="6" class="text-center py-5 text-muted">🌸 Aún no hay prendas registradas en el closet virtual. 🌸</td>
                             </tr>
                             {% endfor %}
                         </tbody>
