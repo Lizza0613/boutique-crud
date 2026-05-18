@@ -11,6 +11,7 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
+# ¡Ojo aquí! Debe decir exactamente 'backend_tienda.settings'
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend_tienda.settings')
 
 application = get_wsgi_application()
