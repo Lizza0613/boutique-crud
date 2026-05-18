@@ -624,42 +624,22 @@
           
         </div>
       </div>
-    </div>
-<!-- SCRIPT DE CONTROL INTERACTIVO (MODAL + EDICIÓN EN LÍNEA) -->
+    </div><!-- SCRIPT DE CONTROL INTERACTIVO (MODAL + EDICIÓN EN LÍNEA) -->
     <script>
       // ─── LÓGICA PARA ACTIVAR LA EDICIÓN POR FILA ─────────────────
       function activarEdicion(id) {
         const fila = document.getElementById(`fila-${id}`);
-        
-        // 1. Habilitar todos los inputs de esta fila quitando el atributo 'disabled'
         const inputs = fila.querySelectorAll('.editable-input');
         inputs.forEach(input => input.removeAttribute('disabled'));
         
-        // 2. Intercambiar la visibilidad de los botones usando clases de Bootstrap
         fila.querySelector('.btn-editar-activar').classList.add('d-none');
         fila.querySelector('.btn-eliminar-tabla').classList.add('d-none');
-        
         fila.querySelector('.btn-guardar').classList.remove('d-none');
         fila.querySelector('.btn-cancelar').classList.remove('d-none');
       }
 
       function cancelarEdicion(id) {
-        const fila = document.getElementById(`fila-${id}`);
-        
-        // 1. Volver a bloquear los inputs agregando 'disabled'
-        const inputs = fila.querySelectorAll('.editable-input');
-        inputs.forEach(input => input.setAttribute('disabled', 'true'));
-        
-        // 2. Regresar los botones a su estado original de lectura
-        fila.querySelector('.btn-editar-activar').classList.remove('d-none');
-        fila.querySelector('.btn-eliminar-tabla').classList.remove('d-none');
-        
-        fila.querySelector('.btn-guardar').classList.add('d-none');
-        fila.querySelector('.btn-cancelar').classList.add('d-none');
-        
-        // 3. Opcional: Recargar la página limpia si modificaron algo pero cancelaron
-        // para restaurar los valores originales de la base de datos sin guardar.
-        window.location.reload();
+        window.location.reload(); // Recarga limpia para restaurar valores originales
       }
 
       // ─── LÓGICA DEL MODAL CHIC DE ELIMINACIÓN ─────────────────────
@@ -673,8 +653,9 @@
           const modalItemName = confirmDeleteModal.querySelector('#modal-item-name');
           modalItemName.textContent = `"${productoNombre}"`;
           
+          // CORRECCIÓN: Añadimos 'producto/' al inicio para que coincida con tu URLconf de Django
           const modalDeleteButton = confirmDeleteModal.querySelector('#modal-delete-button');
-          modalDeleteButton.href = `/eliminar/${productoId}/`; 
+          modalDeleteButton.href = `/producto/eliminar/${productoId}/`; 
         });
       }
     </script>
