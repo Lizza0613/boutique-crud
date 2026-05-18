@@ -233,6 +233,15 @@
         opacity: 0.35;
       }
 
+      /* Estilos específicos para armonizar el select */
+      .form-select {
+        cursor: pointer;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='%23bf54a3' d='M0 0l5 5 5-5z'/></svg>");
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        background-size: 10px 6px;
+      }
+
       /* ─── BOTONES ─────────────────────────────────────────────── */
       .btn-add {
         background: linear-gradient(135deg, var(--primario), var(--acento));
@@ -347,30 +356,6 @@
         color: var(--texto-principal);
       }
 
-      .id-badge {
-        font-size: 0.72rem;
-        font-weight: 600;
-        color: var(--acento);
-        background: rgba(191, 84, 163, 0.08);
-        border-radius: 6px;
-        padding: 0.15rem 0.5rem;
-        letter-spacing: 0.05em;
-      }
-
-      table.bc-table .form-control,
-      table.bc-table .form-select {
-        border-radius: 8px;
-        padding: 0.3rem 0.6rem;
-        font-size: 0.83rem;
-        border: 1.5px solid var(--acento-suave);
-      }
-
-      table.bc-table .form-control:focus,
-      table.bc-table .form-select:focus {
-        border-color: var(--acento);
-        box-shadow: 0 0 0 2px rgba(191, 84, 163, 0.1);
-      }
-
       .empty-row td {
         padding: 3.5rem 1rem;
         text-align: center;
@@ -390,37 +375,6 @@
         align-items: center;
         justify-content: flex-end;
         padding-right: 0.5rem;
-      }
-
-      /* ─── SEPARADOR ──────────────────────────────────────────── */
-      .divider {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        margin: 0 2rem;
-        padding-bottom: 1.5rem;
-      }
-
-      .divider::before,
-      .divider::after {
-        content: "";
-        flex: 1;
-        height: 1px;
-        background: linear-gradient(
-          90deg,
-          transparent,
-          var(--acento-suave),
-          transparent
-        );
-      }
-
-      .divider span {
-        font-size: 0.68rem;
-        letter-spacing: 0.15em;
-        text-transform: uppercase;
-        color: var(--acento-suave);
-        font-weight: 600;
-        white-space: nowrap;
       }
 
       /* ─── FOOTER ─────────────────────────────────────────────── */
@@ -484,115 +438,10 @@
       <header class="hero">
         <span class="hero-eyebrow">Sistema de gestión de inventario</span>
         <h1 class="hero-title">
-          <svg
-            class="petal"
-            viewBox="0 0 32 32"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <ellipse
-              cx="16"
-              cy="8"
-              rx="5"
-              ry="8"
-              fill="#D9A7CB"
-              opacity=".7"
-              transform="rotate(0 16 16)"
-            />
-            <ellipse
-              cx="16"
-              cy="8"
-              rx="5"
-              ry="8"
-              fill="#BF54A3"
-              opacity=".5"
-              transform="rotate(72 16 16)"
-            />
-            <ellipse
-              cx="16"
-              cy="8"
-              rx="5"
-              ry="8"
-              fill="#D9A7CB"
-              opacity=".6"
-              transform="rotate(144 16 16)"
-            />
-            <ellipse
-              cx="16"
-              cy="8"
-              rx="5"
-              ry="8"
-              fill="#975D6C"
-              opacity=".5"
-              transform="rotate(216 16 16)"
-            />
-            <ellipse
-              cx="16"
-              cy="8"
-              rx="5"
-              ry="8"
-              fill="#D9A7CB"
-              opacity=".65"
-              transform="rotate(288 16 16)"
-            />
-            <circle cx="16" cy="16" r="4" fill="#F2F2F2" />
-          </svg>
+          <!-- SVGs de los pétalos elegantes -->
+          <svg class="petal" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><ellipse cx="16" cy="8" rx="5" ry="8" fill="#D9A7CB" opacity=".7" transform="rotate(0 16 16)"/><ellipse cx="16" cy="8" rx="5" ry="8" fill="#BF54A3" opacity=".5" transform="rotate(72 16 16)"/><ellipse cx="16" cy="8" rx="5" ry="8" fill="#D9A7CB" opacity=".6" transform="rotate(144 16 16)"/><ellipse cx="16" cy="8" rx="5" ry="8" fill="#975D6C" opacity=".5" transform="rotate(216 16 16)"/><ellipse cx="16" cy="8" rx="5" ry="8" fill="#D9A7CB" opacity=".65" transform="rotate(288 16 16)"/><circle cx="16" cy="16" r="4" fill="#F2F2F2"/></svg>
           Boutique <em>Chic</em>
-          <svg
-            class="petal"
-            viewBox="0 0 32 32"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <ellipse
-              cx="16"
-              cy="8"
-              rx="5"
-              ry="8"
-              fill="#D9A7CB"
-              opacity=".7"
-              transform="rotate(0 16 16)"
-            />
-            <ellipse
-              cx="16"
-              cy="8"
-              rx="5"
-              ry="8"
-              fill="#BF54A3"
-              opacity=".5"
-              transform="rotate(72 16 16)"
-            />
-            <ellipse
-              cx="16"
-              cy="8"
-              rx="5"
-              ry="8"
-              fill="#D9A7CB"
-              opacity=".6"
-              transform="rotate(144 16 16)"
-            />
-            <ellipse
-              cx="16"
-              cy="8"
-              rx="5"
-              ry="8"
-              fill="#975D6C"
-              opacity=".5"
-              transform="rotate(216 16 16)"
-            />
-            <ellipse
-              cx="16"
-              cy="8"
-              rx="5"
-              ry="8"
-              fill="#D9A7CB"
-              opacity=".65"
-              transform="rotate(288 16 16)"
-            />
-            <circle cx="16" cy="16" r="4" fill="#F2F2F2" />
-          </svg>
+          <svg class="petal" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><ellipse cx="16" cy="8" rx="5" ry="8" fill="#D9A7CB" opacity=".7" transform="rotate(0 16 16)"/><ellipse cx="16" cy="8" rx="5" ry="8" fill="#BF54A3" opacity=".5" transform="rotate(72 16 16)"/><ellipse cx="16" cy="8" rx="5" ry="8" fill="#D9A7CB" opacity=".6" transform="rotate(144 16 16)"/><ellipse cx="16" cy="8" rx="5" ry="8" fill="#975D6C" opacity=".5" transform="rotate(216 16 16)"/><ellipse cx="16" cy="8" rx="5" ry="8" fill="#D9A7CB" opacity=".65" transform="rotate(288 16 16)"/><circle cx="16" cy="16" r="4" fill="#F2F2F2"/></svg>
         </h1>
         <p class="hero-sub">Gestión de inventario de ropa — Colección 2026</p>
       </header>
@@ -618,13 +467,13 @@
                 />
               </div>
               <div class="col-md-3">
-                <label for="categoria">Categoría:</label>
-                <select name="categoria" id="categoria" required>
+                <label class="form-label">Categoría</label>
+                <!-- Modificado: Añadida la clase form-select para heredar los estilos globales armónicos -->
+                <select name="categoria" id="categoria" class="form-select" required>
                   <option value="" disabled selected>
                     Selecciona una categoría
                   </option>
                   {% for categoria in categorias %}
-                  <!-- El value DEBE ser el ID numérico -->
                   <option value="{{ categoria.id }}">
                     {{ categoria.nombre }}
                   </option>
@@ -659,6 +508,49 @@
           </form>
         </div>
       </div>
+
+      <!-- ══════════════════ TABLA LAVANDA ══════════════════ -->
+      <!-- Agregada la validación para renderizar la tabla si existen productos en la base de datos -->
+      {% if productos %}
+      <div class="bc-card">
+        <div class="bc-card-header lavanda">
+          <div class="header-icon">✧</div>
+          <h5>Prendas Registradas en el Inventario</h5>
+        </div>
+        <div class="tabla-wrap">
+          <table class="bc-table">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th class="text-end">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for producto in productos %}
+              <tr>
+                <td>{{ producto.nombre }}</td>
+                <td>${{ producto.precio }}</td>
+                <td>{{ producto.stock }} piezas</td>
+                <td>
+                  <div class="actions-cell">
+                    <a href="{% url 'editar_producto' producto.id %}" class="btn-save">Editar</a>
+                    <a href="{% url 'eliminar_producto' producto.id %}" class="btn-del">Eliminar</a>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      {% else %}
+      <!-- Mensaje elegante por si la base de datos está vacía -->
+      <div class="text-center py-4">
+        <p class="empty-msg">No hay prendas en el clóset todavía. ¡Agrega la primera!</p>
+      </div>
+      {% endif %}
 
       <!-- ══════════════════ FOOTER ══════════════════ -->
       <footer class="site-footer">
