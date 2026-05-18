@@ -514,7 +514,7 @@
       <div class="bc-card">
         <div class="bc-card-header lavanda">
           <div class="header-icon">✧</div>
-          <h5>Prendas Registradas en el Inventario (Puedes editar directo en las casillas)</h5>
+          <h5>Prendas Registradas en el Inventario</h5>
         </div>
         <div class="tabla-wrap">
           <table class="bc-table">
@@ -528,23 +528,24 @@
             </thead>
             <tbody>
               {% for producto in productos %}
-              <tr>
+              <!-- Le asignamos un ID único a cada fila para que JavaScript sepa cuál activar -->
+              <tr id="fila-{{ producto.id }}">
                 <form action="{% url 'editar_producto' producto.id %}" method="POST" class="d-inline">
                   {% csrf_token %}
                   
-                  <!-- Casilla de Nombre -->
+                  <!-- Casilla de Nombre (Inicia deshabilitada) -->
                   <td>
-                    <input type="text" name="nombre" value="{{ producto.nombre }}" class="form-control" required />
+                    <input type="text" name="nombre" value="{{ producto.nombre }}" class="form-control editable-input" disabled required />
                   </td>
                   
-                  <!-- Casilla de Precio -->
+                  <!-- Casilla de Precio (Inicia deshabilitada) -->
                   <td>
-                    <input type="number" name="precio" value="{{ producto.precio }}" class="form-control" step="0.01" required />
+                    <input type="number" name="precio" value="{{ producto.precio }}" class="form-control editable-input" step="0.01" disabled required />
                   </td>
                   
-                  <!-- Casilla de Stock -->
+                  <!-- Casilla de Stock (Inicia deshabilitada) -->
                   <td>
-                    <input type="number" name="stock" value="{{ producto.stock }}" class="form-control" required />
+                    <input type="number" name="stock" value="{{ producto.stock }}" class="form-control editable-input" disabled required />
                   </td>
                   
                   <!-- Campo oculto para mantener la categoría original al editar -->
@@ -552,17 +553,22 @@
 
                   <td>
                     <div class="actions-cell">
-                      <!-- Botón Guardar (Edición) -->
-                      <button type="submit" class="btn-save">Guardar</button>
+                      <!-- BOTONES EN MODO LECTURA (Por defecto) -->
+                      <button type="button" class="btn-save btn-editar-activar" onclick="activarEdicion('{{ producto.id }}')">Editar</button>
                       
-                     <button type="button" 
-        class="btn-del" 
-        data-bs-toggle="modal" 
-        data-bs-target="#confirmDeleteModal" 
-        data-id="{{ producto.id }}" 
-        data-nombre="{{ producto.nombre }}">
-  Eliminar
-</button>
+                      <!-- BOTONES EN MODO EDICIÓN (Ocultos al principio con d-none) -->
+                      <button type="submit" class="btn-save btn-guardar d-none" style="background: linear-gradient(135deg, var(--primario), var(--acento));">Guardar</button>
+                      <button type="button" class="btn-save btn-cancelar d-none" style="background: #999;" onclick="cancelarEdicion('{{ producto.id }}')">Cancelar</button>
+                      
+                      <!-- Botón Eliminar (Se oculta temporalmente mientras se edita para no saturar espacio) -->
+                      <button type="button" 
+                              class="btn-del btn-eliminar-tabla" 
+                              data-bs-toggle="modal" 
+                              data-bs-target="#confirmDeleteModal" 
+                              data-id="{{ producto.id }}" 
+                              data-nombre="{{ producto.nombre }}">
+                        Eliminar
+                      </button>
                     </div>
                   </td>
                 </form>
@@ -619,27 +625,56 @@
         </div>
       </div>
     </div>
-
-    <!-- SCRIPT PARA PASAR LOS DATOS DINÁMICAMENTE AL MODAL -->
+<!-- SCRIPT DE CONTROL INTERACTIVO (MODAL + EDICIÓN EN LÍNEA) -->
     <script>
+      // ─── LÓGICA PARA ACTIVAR LA EDICIÓN POR FILA ─────────────────
+      function activarEdicion(id) {
+        const fila = document.getElementById(`fila-${id}`);
+        
+        // 1. Habilitar todos los inputs de esta fila quitando el atributo 'disabled'
+        const inputs = fila.querySelectorAll('.editable-input');
+        inputs.forEach(input => input.removeAttribute('disabled'));
+        
+        // 2. Intercambiar la visibilidad de los botones usando clases de Bootstrap
+        fila.querySelector('.btn-editar-activar').classList.add('d-none');
+        fila.querySelector('.btn-eliminar-tabla').classList.add('d-none');
+        
+        fila.querySelector('.btn-guardar').classList.remove('d-none');
+        fila.querySelector('.btn-cancelar').classList.remove('d-none');
+      }
+
+      function cancelarEdicion(id) {
+        const fila = document.getElementById(`fila-${id}`);
+        
+        // 1. Volver a bloquear los inputs agregando 'disabled'
+        const inputs = fila.querySelectorAll('.editable-input');
+        inputs.forEach(input => input.setAttribute('disabled', 'true'));
+        
+        // 2. Regresar los botones a su estado original de lectura
+        fila.querySelector('.btn-editar-activar').classList.remove('d-none');
+        fila.querySelector('.btn-eliminar-tabla').classList.remove('d-none');
+        
+        fila.querySelector('.btn-guardar').classList.add('d-none');
+        fila.querySelector('.btn-cancelar').classList.add('d-none');
+        
+        // 3. Opcional: Recargar la página limpia si modificaron algo pero cancelaron
+        // para restaurar los valores originales de la base de datos sin guardar.
+        window.location.reload();
+      }
+
+      // ─── LÓGICA DEL MODAL CHIC DE ELIMINACIÓN ─────────────────────
       const confirmDeleteModal = document.getElementById('confirmDeleteModal');
       if (confirmDeleteModal) {
         confirmDeleteModal.addEventListener('show.bs.modal', function (event) {
-          // Botón que disparó el modal
           const button = event.relatedTarget;
-          
-          // Extraer la información de los atributos data-*
           const productoId = button.getAttribute('data-id');
           const productoNombre = button.getAttribute('data-nombre');
           
-          // Cambiar el texto del nombre del producto en el modal
           const modalItemName = confirmDeleteModal.querySelector('#modal-item-name');
           modalItemName.textContent = `"${productoNombre}"`;
           
-          // Construir dinámicamente la URL de eliminación de Django
           const modalDeleteButton = confirmDeleteModal.querySelector('#modal-delete-button');
           modalDeleteButton.href = `/eliminar/${productoId}/`; 
-          // Nota: Si tu ruta en urls.py es diferente (ej: 'productos/eliminar/'), asegúrate de que coincida aquí.
         });
       }
     </script>
