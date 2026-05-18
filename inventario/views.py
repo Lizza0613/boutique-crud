@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Producto, Categoria
 
-# 1. MOSTRAR PRODUCTOS (Cambiado a 'index' para que coincida con urls.py)
+# 1. MOSTRAR PRODUCTOS
 def index(request):
     productos = Producto.objects.all()
     categorias = Categoria.objects.all()
@@ -19,9 +19,9 @@ def crear_producto(request):
             precio=request.POST.get('precio'),
             stock=request.POST.get('stock')
         )
-    return redirect('index')  # Redirige a la página principal limpia
+    return redirect('/')  # <-- Cambiado a '/' para ir directo a la página principal
 
-# 3. EDITAR PRODUCTO (Cambiado 'pk' por 'id' para que coincida con urls.py)
+# 3. EDITAR PRODUCTO
 def editar_producto(request, id):
     producto = get_object_or_404(Producto, id=id)
     if request.method == 'POST':
@@ -31,10 +31,10 @@ def editar_producto(request, id):
         producto.precio = request.POST.get('precio')
         producto.stock = request.POST.get('stock')
         producto.save()
-    return redirect('index')
+    return redirect('/')  # <-- Cambiado a '/'
 
-# 4. ELIMINAR PRODUCTO (Cambiado 'pk' por 'id' para que coincida con urls.py)
+# 4. ELIMINAR PRODUCTO
 def eliminar_producto(request, id):
     producto = get_object_or_404(Producto, id=id)
     producto.delete()
-    return redirect('index')
+    return redirect('/')  # <-- Cambiado a '/'
