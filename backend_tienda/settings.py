@@ -76,14 +76,11 @@ WSGI_APPLICATION = 'backend_tienda.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'nombre_de_tu_base_de_datos_en_produccion',
-        'USER': 'tu_usuario_de_produccion',
-        'PASSWORD': 'tu_contraseña_de_produccion',
-        'HOST': 'la_direccion_del_servidor_que_te_dieron_en_la_nube', # <--- AQUÍ ya no va 127.0.0.1 o localhost
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
 
