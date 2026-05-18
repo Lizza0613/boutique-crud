@@ -77,14 +77,13 @@ WSGI_APPLICATION = 'backend_tienda.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'tienda_ropa_db',
-        'USER': 'root',                # Tu usuario de MySQL (por defecto es root)
-        'PASSWORD': 'root',    # !!! AQUÍ ESCRIBE TU CONTRASEÑA DE MYSQL !!!
-        'HOST': '127.0.0.1',
+        'NAME': 'nombre_de_tu_base_de_datos_en_produccion',
+        'USER': 'tu_usuario_de_produccion',
+        'PASSWORD': 'tu_contraseña_de_produccion',
+        'HOST': 'la_direccion_del_servidor_que_te_dieron_en_la_nube', # <--- AQUÍ ya no va 127.0.0.1 o localhost
         'PORT': '3306',
     }
 }
-
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
 
