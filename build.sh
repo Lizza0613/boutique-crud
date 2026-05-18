@@ -6,6 +6,7 @@ pip install -r requirements.txt
 
 python manage.py collectstatic --no-input
 
-# ¡Estas dos líneas juntas crean las tablas que faltan!
-python manage.py makemigrations
-python manage.py migrate
+# Esto obliga a Django a rehacer los planos y meterlos a la fuerza
+python manage.py makemigrations --merge --noinput
+python manage.py makemigrations inventario --noinput
+python manage.py migrate --noinput
