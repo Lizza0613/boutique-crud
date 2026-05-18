@@ -3,6 +3,13 @@ from .models import Producto, Categoria
 
 # 1. MOSTRAR PRODUCTOS
 def index(request):
+    # Si no existen categorías, las creamos en automático
+    if not Categoria.objects.exists():
+        Categoria.objects.create(nombre="Blusas")
+        Categoria.objects.create(nombre="Pantalones")
+        Categoria.objects.create(nombre="Vestidos")
+        Categoria.objects.create(nombre="Accesorios")
+
     productos = Producto.objects.all()
     categorias = Categoria.objects.all()
     return render(request, 'index.html', {'productos': productos, 'categorias': categorias})
@@ -19,7 +26,7 @@ def crear_producto(request):
             precio=request.POST.get('precio'),
             stock=request.POST.get('stock')
         )
-    return redirect('/')  # <-- Cambiado a '/' para ir directo a la página principal
+    return redirect('index')  
 
 # 3. EDITAR PRODUCTO
 def editar_producto(request, id):
@@ -31,10 +38,10 @@ def editar_producto(request, id):
         producto.precio = request.POST.get('precio')
         producto.stock = request.POST.get('stock')
         producto.save()
-    return redirect('/')  # <-- Cambiado a '/'
+    return redirect('index')
 
 # 4. ELIMINAR PRODUCTO
 def eliminar_producto(request, id):
     producto = get_object_or_404(Producto, id=id)
     producto.delete()
-    return redirect('/')  # <-- Cambiado a '/'
+    return redirect('index')  

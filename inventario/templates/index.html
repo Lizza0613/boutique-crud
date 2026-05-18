@@ -1,488 +1,672 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Boutique Chic — Inventario</title>
 
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
 
     <!-- Google Fonts: Cormorant Garamond (display elegante) + Jost (cuerpo limpio) -->
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
 
     <style>
-        /* ─── PALETA ─────────────────────────────────────────────── */
-        :root {
-            --fondo-principal : #E1D7D6;
-            --fondo-tarjeta   : #F2F2F2;
-            --primario        : #975D6C;
-            --acento          : #BF54A3;
-            --acento-suave    : #D9A7CB;
-            --texto-principal : #4E4136;
-            --boton-editar    : #9F9064;
-            --boton-eliminar  : #BF8B78;
+      /* ─── PALETA ─────────────────────────────────────────────── */
+      :root {
+        --fondo-principal: #e1d7d6;
+        --fondo-tarjeta: #f2f2f2;
+        --primario: #975d6c;
+        --acento: #bf54a3;
+        --acento-suave: #d9a7cb;
+        --texto-principal: #4e4136;
+        --boton-editar: #9f9064;
+        --boton-eliminar: #bf8b78;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background-color: var(--fondo-principal);
+        font-family: "Jost", sans-serif;
+        color: var(--texto-principal);
+        min-height: 100vh;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image:
+          radial-gradient(
+            circle at 20% 20%,
+            rgba(191, 84, 163, 0.07) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 80% 80%,
+            rgba(151, 93, 108, 0.08) 0%,
+            transparent 50%
+          );
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .page-wrap {
+        position: relative;
+        z-index: 1;
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 3rem 1.5rem 4rem;
+      }
+
+      /* ─── HERO ───────────────────────────────────────────────── */
+      .hero {
+        text-align: center;
+        padding: 3.5rem 2rem 3rem;
+        margin-bottom: 3rem;
+        position: relative;
+      }
+
+      .hero::after {
+        content: "";
+        display: block;
+        width: 80px;
+        height: 2px;
+        background: linear-gradient(90deg, var(--acento-suave), var(--acento));
+        margin: 1.5rem auto 0;
+        border-radius: 2px;
+      }
+
+      .hero-eyebrow {
+        font-family: "Jost", sans-serif;
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        color: var(--acento);
+        margin-bottom: 0.75rem;
+        display: block;
+      }
+
+      .hero-title {
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(2.6rem, 6vw, 4rem);
+        font-weight: 700;
+        color: var(--primario);
+        line-height: 1.1;
+        letter-spacing: -0.01em;
+      }
+
+      .hero-title em {
+        font-style: italic;
+        color: var(--acento);
+      }
+
+      .hero-sub {
+        font-size: 0.9rem;
+        font-weight: 300;
+        color: var(--texto-principal);
+        opacity: 0.65;
+        margin-top: 0.6rem;
+        letter-spacing: 0.04em;
+      }
+
+      .petal {
+        display: inline-block;
+        width: 28px;
+        height: 28px;
+        vertical-align: middle;
+        margin: 0 0.4rem;
+        opacity: 0.6;
+      }
+
+      /* ─── CARDS ──────────────────────────────────────────────── */
+      .bc-card {
+        background: var(--fondo-tarjeta);
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow:
+          0 4px 24px rgba(78, 65, 54, 0.08),
+          0 1px 4px rgba(78, 65, 54, 0.06);
+        margin-bottom: 2.5rem;
+        transition: box-shadow 0.3s ease;
+      }
+
+      .bc-card:hover {
+        box-shadow:
+          0 8px 36px rgba(78, 65, 54, 0.12),
+          0 2px 8px rgba(78, 65, 54, 0.07);
+      }
+
+      .bc-card-header {
+        padding: 1.1rem 2rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .bc-card-header.rosa {
+        background: linear-gradient(
+          110deg,
+          var(--primario) 0%,
+          var(--acento) 100%
+        );
+      }
+
+      .bc-card-header.lavanda {
+        background: linear-gradient(110deg, #7b5ea7 0%, var(--acento) 100%);
+      }
+
+      .bc-card-header h5 {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.15rem;
+        font-weight: 600;
+        color: #fff;
+        margin: 0;
+        letter-spacing: 0.02em;
+      }
+
+      .header-icon {
+        width: 28px;
+        height: 28px;
+        background: rgba(255, 255, 255, 0.18);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.95rem;
+        flex-shrink: 0;
+      }
+
+      .bc-card-body {
+        padding: 2rem;
+      }
+
+      /* ─── FORMULARIO ─────────────────────────────────────────── */
+      .form-label {
+        font-size: 0.78rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--primario);
+        margin-bottom: 0.4rem;
+        display: block;
+      }
+
+      .form-control,
+      .form-select {
+        background: #fff;
+        border: 1.5px solid var(--acento-suave);
+        border-radius: 12px;
+        padding: 0.6rem 1rem;
+        font-family: "Jost", sans-serif;
+        font-size: 0.9rem;
+        color: var(--texto-principal);
+        transition:
+          border-color 0.25s,
+          box-shadow 0.25s;
+        width: 100%;
+      }
+
+      .form-control:focus,
+      .form-select:focus {
+        outline: none;
+        border-color: var(--acento);
+        box-shadow: 0 0 0 3px rgba(191, 84, 163, 0.12);
+      }
+
+      .form-control::placeholder {
+        color: var(--texto-principal);
+        opacity: 0.35;
+      }
+
+      /* ─── BOTONES ─────────────────────────────────────────────── */
+      .btn-add {
+        background: linear-gradient(135deg, var(--primario), var(--acento));
+        color: #fff;
+        border: none;
+        border-radius: 14px;
+        padding: 0.62rem 1.4rem;
+        font-family: "Jost", sans-serif;
+        font-size: 0.88rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        cursor: pointer;
+        transition:
+          opacity 0.25s,
+          transform 0.2s;
+        white-space: nowrap;
+      }
+
+      .btn-add:hover {
+        opacity: 0.88;
+        transform: translateY(-2px);
+        color: #fff;
+      }
+
+      .btn-save {
+        background: var(--boton-editar);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        padding: 0.35rem 0.9rem;
+        font-family: "Jost", sans-serif;
+        font-size: 0.78rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        cursor: pointer;
+        transition:
+          background 0.2s,
+          transform 0.15s;
+      }
+
+      .btn-save:hover {
+        background: #8a7b52;
+        transform: translateY(-1px);
+        color: #fff;
+      }
+
+      .btn-del {
+        background: var(--boton-eliminar);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        padding: 0.35rem 0.9rem;
+        font-family: "Jost", sans-serif;
+        font-size: 0.78rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        transition:
+          background 0.2s,
+          transform 0.15s;
+      }
+
+      .btn-del:hover {
+        background: #a5704d;
+        transform: translateY(-1px);
+        color: #fff;
+      }
+
+      /* ─── TABLA ──────────────────────────────────────────────── */
+      .tabla-wrap {
+        overflow-x: auto;
+        border-radius: 0 0 20px 20px;
+      }
+
+      table.bc-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: var(--fondo-tarjeta);
+        font-size: 0.87rem;
+      }
+
+      table.bc-table thead th {
+        background: rgba(217, 167, 203, 0.22);
+        color: var(--primario);
+        font-family: "Jost", sans-serif;
+        font-size: 0.7rem;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 1rem 1.2rem;
+        border-bottom: 1.5px solid var(--acento-suave);
+        white-space: nowrap;
+      }
+
+      table.bc-table tbody tr {
+        border-bottom: 1px solid rgba(217, 167, 203, 0.25);
+        transition: background 0.18s;
+      }
+
+      table.bc-table tbody tr:last-child {
+        border-bottom: none;
+      }
+      table.bc-table tbody tr:hover {
+        background: rgba(217, 167, 203, 0.1);
+      }
+
+      table.bc-table td {
+        padding: 0.75rem 1.2rem;
+        vertical-align: middle;
+        color: var(--texto-principal);
+      }
+
+      .id-badge {
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: var(--acento);
+        background: rgba(191, 84, 163, 0.08);
+        border-radius: 6px;
+        padding: 0.15rem 0.5rem;
+        letter-spacing: 0.05em;
+      }
+
+      table.bc-table .form-control,
+      table.bc-table .form-select {
+        border-radius: 8px;
+        padding: 0.3rem 0.6rem;
+        font-size: 0.83rem;
+        border: 1.5px solid var(--acento-suave);
+      }
+
+      table.bc-table .form-control:focus,
+      table.bc-table .form-select:focus {
+        border-color: var(--acento);
+        box-shadow: 0 0 0 2px rgba(191, 84, 163, 0.1);
+      }
+
+      .empty-row td {
+        padding: 3.5rem 1rem;
+        text-align: center;
+      }
+
+      .empty-msg {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.1rem;
+        font-style: italic;
+        color: var(--primario);
+        opacity: 0.55;
+      }
+
+      .actions-cell {
+        display: flex;
+        gap: 0.4rem;
+        align-items: center;
+        justify-content: flex-end;
+        padding-right: 0.5rem;
+      }
+
+      /* ─── SEPARADOR ──────────────────────────────────────────── */
+      .divider {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin: 0 2rem;
+        padding-bottom: 1.5rem;
+      }
+
+      .divider::before,
+      .divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--acento-suave),
+          transparent
+        );
+      }
+
+      .divider span {
+        font-size: 0.68rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--acento-suave);
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      /* ─── FOOTER ─────────────────────────────────────────────── */
+      .site-footer {
+        text-align: center;
+        padding: 2rem 0 1rem;
+        font-size: 0.78rem;
+        color: var(--texto-principal);
+        opacity: 0.45;
+        letter-spacing: 0.05em;
+      }
+
+      /* ─── ANIMACIÓN ──────────────────────────────────────────── */
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(18px);
         }
-
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-        body {
-            background-color: var(--fondo-principal);
-            font-family: 'Jost', sans-serif;
-            color: var(--texto-principal);
-            min-height: 100vh;
+        to {
+          opacity: 1;
+          transform: translateY(0);
         }
+      }
 
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background-image:
-                radial-gradient(circle at 20% 20%, rgba(191,84,163,0.07) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(151,93,108,0.08) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: 0;
+      .hero {
+        animation: fadeUp 0.6s ease both;
+      }
+      .bc-card {
+        animation: fadeUp 0.6s ease both;
+      }
+      .bc-card:nth-child(2) {
+        animation-delay: 0.1s;
+      }
+      .bc-card:nth-child(3) {
+        animation-delay: 0.2s;
+      }
+
+      /* ─── RESPONSIVO ─────────────────────────────────────────── */
+      @media (max-width: 768px) {
+        .bc-card-body {
+          padding: 1.2rem;
         }
-
-        .page-wrap {
-            position: relative;
-            z-index: 1;
-            max-width: 1080px;
-            margin: 0 auto;
-            padding: 3rem 1.5rem 4rem;
-        }
-
-        /* ─── HERO ───────────────────────────────────────────────── */
         .hero {
-            text-align: center;
-            padding: 3.5rem 2rem 3rem;
-            margin-bottom: 3rem;
-            position: relative;
+          padding: 2rem 1rem 1.5rem;
         }
-
-        .hero::after {
-            content: '';
-            display: block;
-            width: 80px;
-            height: 2px;
-            background: linear-gradient(90deg, var(--acento-suave), var(--acento));
-            margin: 1.5rem auto 0;
-            border-radius: 2px;
-        }
-
-        .hero-eyebrow {
-            font-family: 'Jost', sans-serif;
-            font-size: 0.72rem;
-            font-weight: 600;
-            letter-spacing: 0.25em;
-            text-transform: uppercase;
-            color: var(--acento);
-            margin-bottom: 0.75rem;
-            display: block;
-        }
-
-        .hero-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: clamp(2.6rem, 6vw, 4rem);
-            font-weight: 700;
-            color: var(--primario);
-            line-height: 1.1;
-            letter-spacing: -0.01em;
-        }
-
-        .hero-title em {
-            font-style: italic;
-            color: var(--acento);
-        }
-
-        .hero-sub {
-            font-size: 0.9rem;
-            font-weight: 300;
-            color: var(--texto-principal);
-            opacity: 0.65;
-            margin-top: 0.6rem;
-            letter-spacing: 0.04em;
-        }
-
-        .petal {
-            display: inline-block;
-            width: 28px;
-            height: 28px;
-            vertical-align: middle;
-            margin: 0 0.4rem;
-            opacity: 0.6;
-        }
-
-        /* ─── CARDS ──────────────────────────────────────────────── */
-        .bc-card {
-            background: var(--fondo-tarjeta);
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 4px 24px rgba(78,65,54,0.08), 0 1px 4px rgba(78,65,54,0.06);
-            margin-bottom: 2.5rem;
-            transition: box-shadow 0.3s ease;
-        }
-
-        .bc-card:hover {
-            box-shadow: 0 8px 36px rgba(78,65,54,0.12), 0 2px 8px rgba(78,65,54,0.07);
-        }
-
-        .bc-card-header {
-            padding: 1.1rem 2rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .bc-card-header.rosa {
-            background: linear-gradient(110deg, var(--primario) 0%, var(--acento) 100%);
-        }
-
-        .bc-card-header.lavanda {
-            background: linear-gradient(110deg, #7b5ea7 0%, var(--acento) 100%);
-        }
-
-        .bc-card-header h5 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.15rem;
-            font-weight: 600;
-            color: #fff;
-            margin: 0;
-            letter-spacing: 0.02em;
-        }
-
-        .header-icon {
-            width: 28px;
-            height: 28px;
-            background: rgba(255,255,255,0.18);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.95rem;
-            flex-shrink: 0;
-        }
-
-        .bc-card-body { padding: 2rem; }
-
-        /* ─── FORMULARIO ─────────────────────────────────────────── */
-        .form-label {
-            font-size: 0.78rem;
-            font-weight: 600;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            color: var(--primario);
-            margin-bottom: 0.4rem;
-            display: block;
-        }
-
-        .form-control, .form-select {
-            background: #fff;
-            border: 1.5px solid var(--acento-suave);
-            border-radius: 12px;
-            padding: 0.6rem 1rem;
-            font-family: 'Jost', sans-serif;
-            font-size: 0.9rem;
-            color: var(--texto-principal);
-            transition: border-color 0.25s, box-shadow 0.25s;
-            width: 100%;
-        }
-
-        .form-control:focus, .form-select:focus {
-            outline: none;
-            border-color: var(--acento);
-            box-shadow: 0 0 0 3px rgba(191,84,163,0.12);
-        }
-
-        .form-control::placeholder { color: var(--texto-principal); opacity: 0.35; }
-
-        /* ─── BOTONES ─────────────────────────────────────────────── */
-        .btn-add {
-            background: linear-gradient(135deg, var(--primario), var(--acento));
-            color: #fff;
-            border: none;
-            border-radius: 14px;
-            padding: 0.62rem 1.4rem;
-            font-family: 'Jost', sans-serif;
-            font-size: 0.88rem;
-            font-weight: 600;
-            letter-spacing: 0.06em;
-            cursor: pointer;
-            transition: opacity 0.25s, transform 0.2s;
-            white-space: nowrap;
-        }
-
-        .btn-add:hover {
-            opacity: 0.88;
-            transform: translateY(-2px);
-            color: #fff;
-        }
-
-        .btn-save {
-            background: var(--boton-editar);
-            color: #fff;
-            border: none;
-            border-radius: 10px;
-            padding: 0.35rem 0.9rem;
-            font-family: 'Jost', sans-serif;
-            font-size: 0.78rem;
-            font-weight: 600;
-            letter-spacing: 0.04em;
-            cursor: pointer;
-            transition: background 0.2s, transform 0.15s;
-        }
-
-        .btn-save:hover {
-            background: #8a7b52;
-            transform: translateY(-1px);
-            color: #fff;
-        }
-
-        .btn-del {
-            background: var(--boton-eliminar);
-            color: #fff;
-            border: none;
-            border-radius: 10px;
-            padding: 0.35rem 0.9rem;
-            font-family: 'Jost', sans-serif;
-            font-size: 0.78rem;
-            font-weight: 600;
-            letter-spacing: 0.04em;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            transition: background 0.2s, transform 0.15s;
-        }
-
-        .btn-del:hover {
-            background: #a5704d;
-            transform: translateY(-1px);
-            color: #fff;
-        }
-
-        /* ─── TABLA ──────────────────────────────────────────────── */
-        .tabla-wrap {
-            overflow-x: auto;
-            border-radius: 0 0 20px 20px;
-        }
-
-        table.bc-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: var(--fondo-tarjeta);
-            font-size: 0.87rem;
-        }
-
-        table.bc-table thead th {
-            background: rgba(217,167,203,0.22);
-            color: var(--primario);
-            font-family: 'Jost', sans-serif;
-            font-size: 0.7rem;
-            font-weight: 600;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            padding: 1rem 1.2rem;
-            border-bottom: 1.5px solid var(--acento-suave);
-            white-space: nowrap;
-        }
-
-        table.bc-table tbody tr {
-            border-bottom: 1px solid rgba(217,167,203,0.25);
-            transition: background 0.18s;
-        }
-
-        table.bc-table tbody tr:last-child { border-bottom: none; }
-        table.bc-table tbody tr:hover { background: rgba(217,167,203,0.10); }
-
+        table.bc-table thead th,
         table.bc-table td {
-            padding: 0.75rem 1.2rem;
-            vertical-align: middle;
-            color: var(--texto-principal);
+          padding: 0.6rem 0.7rem;
         }
-
-        .id-badge {
-            font-size: 0.72rem;
-            font-weight: 600;
-            color: var(--acento);
-            background: rgba(191,84,163,0.08);
-            border-radius: 6px;
-            padding: 0.15rem 0.5rem;
-            letter-spacing: 0.05em;
-        }
-
-        table.bc-table .form-control,
-        table.bc-table .form-select {
-            border-radius: 8px;
-            padding: 0.3rem 0.6rem;
-            font-size: 0.83rem;
-            border: 1.5px solid var(--acento-suave);
-        }
-
-        table.bc-table .form-control:focus,
-        table.bc-table .form-select:focus {
-            border-color: var(--acento);
-            box-shadow: 0 0 0 2px rgba(191,84,163,0.10);
-        }
-
-        .empty-row td {
-            padding: 3.5rem 1rem;
-            text-align: center;
-        }
-
-        .empty-msg {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.1rem;
-            font-style: italic;
-            color: var(--primario);
-            opacity: 0.55;
-        }
-
         .actions-cell {
-            display: flex;
-            gap: 0.4rem;
-            align-items: center;
-            justify-content: flex-end;
-            padding-right: 0.5rem;
+          flex-direction: column;
+          align-items: stretch;
+          gap: 0.3rem;
         }
-
-        /* ─── SEPARADOR ──────────────────────────────────────────── */
-        .divider {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin: 0 2rem;
-            padding-bottom: 1.5rem;
-        }
-
-        .divider::before, .divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--acento-suave), transparent);
-        }
-
-        .divider span {
-            font-size: 0.68rem;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            color: var(--acento-suave);
-            font-weight: 600;
-            white-space: nowrap;
-        }
-
-        /* ─── FOOTER ─────────────────────────────────────────────── */
-        .site-footer {
-            text-align: center;
-            padding: 2rem 0 1rem;
-            font-size: 0.78rem;
-            color: var(--texto-principal);
-            opacity: 0.45;
-            letter-spacing: 0.05em;
-        }
-
-        /* ─── ANIMACIÓN ──────────────────────────────────────────── */
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(18px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-
-        .hero    { animation: fadeUp 0.6s ease both; }
-        .bc-card { animation: fadeUp 0.6s ease both; }
-        .bc-card:nth-child(2) { animation-delay: 0.1s; }
-        .bc-card:nth-child(3) { animation-delay: 0.2s; }
-
-        /* ─── RESPONSIVO ─────────────────────────────────────────── */
-        @media (max-width: 768px) {
-            .bc-card-body { padding: 1.2rem; }
-            .hero { padding: 2rem 1rem 1.5rem; }
-            table.bc-table thead th,
-            table.bc-table td { padding: 0.6rem 0.7rem; }
-            .actions-cell { flex-direction: column; align-items: stretch; gap: 0.3rem; }
-        }
+      }
     </style>
-</head>
-<body>
-
-<div class="page-wrap">
-
-    <!-- ══════════════════ HERO ══════════════════ -->
-    <header class="hero">
+  </head>
+  <body>
+    <div class="page-wrap">
+      <!-- ══════════════════ HERO ══════════════════ -->
+      <header class="hero">
         <span class="hero-eyebrow">Sistema de gestión de inventario</span>
         <h1 class="hero-title">
-            <svg class="petal" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <ellipse cx="16" cy="8" rx="5" ry="8" fill="#D9A7CB" opacity=".7" transform="rotate(0 16 16)"/>
-                <ellipse cx="16" cy="8" rx="5" ry="8" fill="#BF54A3" opacity=".5" transform="rotate(72 16 16)"/>
-                <ellipse cx="16" cy="8" rx="5" ry="8" fill="#D9A7CB" opacity=".6" transform="rotate(144 16 16)"/>
-                <ellipse cx="16" cy="8" rx="5" ry="8" fill="#975D6C" opacity=".5" transform="rotate(216 16 16)"/>
-                <ellipse cx="16" cy="8" rx="5" ry="8" fill="#D9A7CB" opacity=".65" transform="rotate(288 16 16)"/>
-                <circle cx="16" cy="16" r="4" fill="#F2F2F2"/>
-            </svg>
-            Boutique <em>Chic</em>
-            <svg class="petal" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <ellipse cx="16" cy="8" rx="5" ry="8" fill="#D9A7CB" opacity=".7" transform="rotate(0 16 16)"/>
-                <ellipse cx="16" cy="8" rx="5" ry="8" fill="#BF54A3" opacity=".5" transform="rotate(72 16 16)"/>
-                <ellipse cx="16" cy="8" rx="5" ry="8" fill="#D9A7CB" opacity=".6" transform="rotate(144 16 16)"/>
-                <ellipse cx="16" cy="8" rx="5" ry="8" fill="#975D6C" opacity=".5" transform="rotate(216 16 16)"/>
-                <ellipse cx="16" cy="8" rx="5" ry="8" fill="#D9A7CB" opacity=".65" transform="rotate(288 16 16)"/>
-                <circle cx="16" cy="16" r="4" fill="#F2F2F2"/>
-            </svg>
+          <svg
+            class="petal"
+            viewBox="0 0 32 32"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <ellipse
+              cx="16"
+              cy="8"
+              rx="5"
+              ry="8"
+              fill="#D9A7CB"
+              opacity=".7"
+              transform="rotate(0 16 16)"
+            />
+            <ellipse
+              cx="16"
+              cy="8"
+              rx="5"
+              ry="8"
+              fill="#BF54A3"
+              opacity=".5"
+              transform="rotate(72 16 16)"
+            />
+            <ellipse
+              cx="16"
+              cy="8"
+              rx="5"
+              ry="8"
+              fill="#D9A7CB"
+              opacity=".6"
+              transform="rotate(144 16 16)"
+            />
+            <ellipse
+              cx="16"
+              cy="8"
+              rx="5"
+              ry="8"
+              fill="#975D6C"
+              opacity=".5"
+              transform="rotate(216 16 16)"
+            />
+            <ellipse
+              cx="16"
+              cy="8"
+              rx="5"
+              ry="8"
+              fill="#D9A7CB"
+              opacity=".65"
+              transform="rotate(288 16 16)"
+            />
+            <circle cx="16" cy="16" r="4" fill="#F2F2F2" />
+          </svg>
+          Boutique <em>Chic</em>
+          <svg
+            class="petal"
+            viewBox="0 0 32 32"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <ellipse
+              cx="16"
+              cy="8"
+              rx="5"
+              ry="8"
+              fill="#D9A7CB"
+              opacity=".7"
+              transform="rotate(0 16 16)"
+            />
+            <ellipse
+              cx="16"
+              cy="8"
+              rx="5"
+              ry="8"
+              fill="#BF54A3"
+              opacity=".5"
+              transform="rotate(72 16 16)"
+            />
+            <ellipse
+              cx="16"
+              cy="8"
+              rx="5"
+              ry="8"
+              fill="#D9A7CB"
+              opacity=".6"
+              transform="rotate(144 16 16)"
+            />
+            <ellipse
+              cx="16"
+              cy="8"
+              rx="5"
+              ry="8"
+              fill="#975D6C"
+              opacity=".5"
+              transform="rotate(216 16 16)"
+            />
+            <ellipse
+              cx="16"
+              cy="8"
+              rx="5"
+              ry="8"
+              fill="#D9A7CB"
+              opacity=".65"
+              transform="rotate(288 16 16)"
+            />
+            <circle cx="16" cy="16" r="4" fill="#F2F2F2" />
+          </svg>
         </h1>
         <p class="hero-sub">Gestión de inventario de ropa — Colección 2026</p>
-    </header>
+      </header>
 
-<!-- ══════════════════ FORMULARIO ══════════════════ -->
-<div class="bc-card">
-    <div class="bc-card-header rosa">
-        <div class="header-icon">✦</div>
-        <h5>Añadir nueva prenda a la colección</h5>
-    </div>
-    <div class="bc-card-body">
-        <form action="{% url 'crear_producto' %}" method="POST">
+      <!-- ══════════════════ FORMULARIO ══════════════════ -->
+      <div class="bc-card">
+        <div class="bc-card-header rosa">
+          <div class="header-icon">✦</div>
+          <h5>Añadir nueva prenda a la colección</h5>
+        </div>
+        <div class="bc-card-body">
+          <form action="{% url 'crear_producto' %}" method="POST">
             {% csrf_token %}
             <div class="row g-3 align-items-end">
-                <div class="col-md-4">
-                    <label class="form-label">Nombre del artículo</label>
-                    <input type="text" name="nombre" class="form-control" placeholder="Ej: Vestido Floral" required>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Categoría</label>
-                    <select name="categoria" class="form-select" required>
-                        <!-- Opción dinámica recomendada si tienes las categorías en tu vista:
-                        {% for cat in categorias %}
-                            <option value="{{ cat.id }}">{{ cat.nombre }}</option>
-                        {% empty %} -->
-                            <option value="1">Blusas</option>
-                            <option value="2">Vestidos</option>
-                            <option value="3">Pantalones</option>
-                            <option value="4">Accesorios</option>
-                            <option value="5">Otros</option>
-                        <!-- {% endfor %} -->
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <label class="form-label">Precio ($)</label>
-                    <input type="number" name="precio" class="form-control" placeholder="00.00" step="0.01" required>
-                </div>
-                <div class="col-md-2">
-                    <label class="form-label">Stock</label>
-                    <input type="number" name="stock" class="form-control" placeholder="Cant." required>
-                </div>
-                <div class="col-md-1 d-flex align-items-end">
-                    <button type="submit" class="btn-add w-100">＋</button>
-                </div>
+              <div class="col-md-4">
+                <label class="form-label">Nombre del artículo</label>
+                <input
+                  type="text"
+                  name="nombre"
+                  class="form-control"
+                  placeholder="Ej: Vestido Floral"
+                  required
+                />
+              </div>
+              <div class="col-md-3">
+                <label for="categoria">Categoría:</label>
+                <select name="categoria" id="categoria" required>
+                  <option value="" disabled selected>
+                    Selecciona una categoría
+                  </option>
+                  {% for categoria in categorias %}
+                  <!-- El value DEBE ser el ID numérico -->
+                  <option value="{{ categoria.id }}">
+                    {{ categoria.nombre }}
+                  </option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="col-md-2">
+                <label class="form-label">Precio ($)</label>
+                <input
+                  type="number"
+                  name="precio"
+                  class="form-control"
+                  placeholder="00.00"
+                  step="0.01"
+                  required
+                />
+              </div>
+              <div class="col-md-2">
+                <label class="form-label">Stock</label>
+                <input
+                  type="number"
+                  name="stock"
+                  class="form-control"
+                  placeholder="Cant."
+                  required
+                />
+              </div>
+              <div class="col-md-1 d-flex align-items-end">
+                <button type="submit" class="btn-add w-100">＋</button>
+              </div>
             </div>
-        </form>
-    </div>
-</div>
+          </form>
+        </div>
+      </div>
 
-    <!-- ══════════════════ FOOTER ══════════════════ -->
-    <footer class="site-footer">
+      <!-- ══════════════════ FOOTER ══════════════════ -->
+      <footer class="site-footer">
         <span>&copy; 2026 Boutique Chic — Estilo y Elegancia</span>
-    </footer>
+      </footer>
+    </div>
 
-</div>
-
-<!-- Bootstrap Bundle JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+    <!-- Bootstrap Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
 </html>
