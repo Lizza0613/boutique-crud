@@ -365,7 +365,7 @@
         font-family: "Cormorant Garamond", serif;
         font-size: 1.1rem;
         font-style: italic;
-        color: var(--primario);
+        color: var(--texto-principal);
         opacity: 0.55;
       }
 
@@ -509,13 +509,12 @@
         </div>
       </div>
 
-      <!-- ══════════════════ TABLA LAVANDA ══════════════════ -->
-      <!-- Agregada la validación para renderizar la tabla si existen productos en la base de datos -->
+<!-- ══════════════════ TABLA LAVANDA ══════════════════ -->
       {% if productos %}
       <div class="bc-card">
         <div class="bc-card-header lavanda">
           <div class="header-icon">✧</div>
-          <h5>Prendas Registradas en el Inventario</h5>
+          <h5>Prendas Registradas en el Inventario (Puedes editar directo en las casillas)</h5>
         </div>
         <div class="tabla-wrap">
           <table class="bc-table">
@@ -530,15 +529,41 @@
             <tbody>
               {% for producto in productos %}
               <tr>
-                <td>{{ producto.nombre }}</td>
-                <td>${{ producto.precio }}</td>
-                <td>{{ producto.stock }} piezas</td>
-                <td>
-                  <div class="actions-cell">
-                    <a href="{% url 'editar_producto' producto.id %}" class="btn-save">Editar</a>
-                    <a href="{% url 'eliminar_producto' producto.id %}" class="btn-del">Eliminar</a>
-                  </div>
-                </td>
+                <form action="{% url 'editar_producto' producto.id %}" method="POST" class="d-inline">
+                  {% csrf_token %}
+                  
+                  <!-- Casilla de Nombre -->
+                  <td>
+                    <input type="text" name="nombre" value="{{ producto.nombre }}" class="form-control" required />
+                  </td>
+                  
+                  <!-- Casilla de Precio -->
+                  <td>
+                    <input type="number" name="precio" value="{{ producto.precio }}" class="form-control" step="0.01" required />
+                  </td>
+                  
+                  <!-- Casilla de Stock -->
+                  <td>
+                    <input type="number" name="stock" value="{{ producto.stock }}" class="form-control" required />
+                  </td>
+                  
+                  <!-- Campo oculto para mantener la categoría original al editar -->
+                  <input type="hidden" name="categoria" value="{{ producto.categoria.id }}" />
+
+                  <td>
+                    <div class="actions-cell">
+                      <!-- Botón Guardar (Edición) -->
+                      <button type="submit" class="btn-save">Guardar</button>
+                      
+                      <!-- Botón Eliminar con Ventana de Confirmación -->
+                      <a href="{% url 'eliminar_producto' producto.id %}" 
+                         class="btn-del" 
+                         onclick="return confirm('¿Estás segura de que deseas eliminar \'{{ producto.nombre }}\' de la colección? Esta acción no se puede deshacer.');">
+                        Eliminar
+                      </a>
+                    </div>
+                  </td>
+                </form>
               </tr>
               {% endfor %}
             </tbody>
@@ -546,12 +571,10 @@
         </div>
       </div>
       {% else %}
-      <!-- Mensaje elegante por si la base de datos está vacía -->
       <div class="text-center py-4">
         <p class="empty-msg">No hay prendas en el clóset todavía. ¡Agrega la primera!</p>
       </div>
       {% endif %}
-
       <!-- ══════════════════ FOOTER ══════════════════ -->
       <footer class="site-footer">
         <span>&copy; 2026 Boutique Chic — Estilo y Elegancia</span>
