@@ -1,7 +1,8 @@
 from django.contrib import admin
-from django.urls import path, include # <-- Asegúrate de que tenga importado 'include'
+from django.urls import path, include  # <-- ¡AQUÍ ESTÁ EL TRUCO! Faltaba importar 'include'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('inventario.urls')), # <-- Esto conecta tu archivo de arriba con el proyecto
+    # Conecta las rutas de tu aplicación de ropa
+    path('', include('inventario.urls')), 
 ]
