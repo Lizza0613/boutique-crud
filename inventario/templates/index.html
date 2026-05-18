@@ -3,137 +3,451 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Boutique Chic - Inventario</title>
+    <title>Boutique Chic — Inventario</title>
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-    
+
+    <!-- Google Fonts: Cormorant Garamond (display elegante) + Jost (cuerpo limpio) -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+
     <style>
+        /* ─── PALETA ─────────────────────────────────────────────── */
         :root {
-            --pink-primary: #ff85a2; 
-            --pink-light: #fce4ec;   
-            --pink-accent: #f06292;  
-            --text-color: #4a4a4a;
+            --fondo-principal : #E1D7D6;
+            --fondo-tarjeta   : #F2F2F2;
+            --primario        : #975D6C;
+            --acento          : #BF54A3;
+            --acento-suave    : #D9A7CB;
+            --texto-principal : #4E4136;
+            --boton-editar    : #9F9064;
+            --boton-eliminar  : #BF8B78;
         }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            background-color: var(--pink-light);
-            font-family: 'Poppins', sans-serif;
-            color: var(--text-color);
+            background-color: var(--fondo-principal);
+            font-family: 'Jost', sans-serif;
+            color: var(--texto-principal);
+            min-height: 100vh;
         }
 
-        h1 {
-            font-family: 'Playfair Display', serif;
-            color: var(--pink-accent);
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                radial-gradient(circle at 20% 20%, rgba(191,84,163,0.07) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(151,93,108,0.08) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .page-wrap {
+            position: relative;
+            z-index: 1;
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem 4rem;
+        }
+
+        /* ─── HERO ───────────────────────────────────────────────── */
+        .hero {
+            text-align: center;
+            padding: 3.5rem 2rem 3rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .hero::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--acento-suave), var(--acento));
+            margin: 1.5rem auto 0;
+            border-radius: 2px;
+        }
+
+        .hero-eyebrow {
+            font-family: 'Jost', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--acento);
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+
+        .hero-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.6rem, 6vw, 4rem);
             font-weight: 700;
-            letter-spacing: 1px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+            color: var(--primario);
+            line-height: 1.1;
+            letter-spacing: -0.01em;
         }
 
-        .card {
-            border: none;
+        .hero-title em {
+            font-style: italic;
+            color: var(--acento);
+        }
+
+        .hero-sub {
+            font-size: 0.9rem;
+            font-weight: 300;
+            color: var(--texto-principal);
+            opacity: 0.65;
+            margin-top: 0.6rem;
+            letter-spacing: 0.04em;
+        }
+
+        .petal {
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            vertical-align: middle;
+            margin: 0 0.4rem;
+            opacity: 0.6;
+        }
+
+        /* ─── CARDS ──────────────────────────────────────────────── */
+        .bc-card {
+            background: var(--fondo-tarjeta);
             border-radius: 20px;
             overflow: hidden;
-            background: #ffffff;
+            box-shadow: 0 4px 24px rgba(78,65,54,0.08), 0 1px 4px rgba(78,65,54,0.06);
+            margin-bottom: 2.5rem;
+            transition: box-shadow 0.3s ease;
         }
 
-        .card-header {
-            background: linear-gradient(45deg, #ff85a2, #f06292) !important;
-            color: white !important;
+        .bc-card:hover {
+            box-shadow: 0 8px 36px rgba(78,65,54,0.12), 0 2px 8px rgba(78,65,54,0.07);
+        }
+
+        .bc-card-header {
+            padding: 1.1rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .bc-card-header.rosa {
+            background: linear-gradient(110deg, var(--primario) 0%, var(--acento) 100%);
+        }
+
+        .bc-card-header.lavanda {
+            background: linear-gradient(110deg, #7b5ea7 0%, var(--acento) 100%);
+        }
+
+        .bc-card-header h5 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.15rem;
             font-weight: 600;
-            text-align: center;
-            border: none;
-            padding: 15px;
+            color: #fff;
+            margin: 0;
+            letter-spacing: 0.02em;
         }
 
-        .btn-girlie {
-            background-color: var(--pink-primary);
-            color: white;
-            border-radius: 25px;
-            padding: 8px 20px;
-            border: none;
-            transition: all 0.3s ease;
+        .header-icon {
+            width: 28px;
+            height: 28px;
+            background: rgba(255,255,255,0.18);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+            flex-shrink: 0;
         }
 
-        .btn-girlie:hover {
-            background-color: var(--pink-accent);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(240, 98, 146, 0.3);
-        }
+        .bc-card-body { padding: 2rem; }
 
-        .btn-update {
-            background-color: #9575cd; 
-            color: white;
-            border-radius: 12px;
-            border: none;
-        }
-
-        .btn-update:hover {
-            background-color: #7e57c2;
-        }
-
-        .btn-delete {
-            background-color: #ffab91; 
-            color: white;
-            border-radius: 12px;
-            border: none;
-        }
-
-        .btn-delete:hover {
-            background-color: #ff8a65;
-        }
-
-        .table {
-            background: white;
-        }
-
-        .table thead th {
-            background-color: #fce4ec !important;
-            color: var(--pink-accent) !important;
-            border-bottom: 2px solid #f8bbd0;
+        /* ─── FORMULARIO ─────────────────────────────────────────── */
+        .form-label {
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--primario);
+            margin-bottom: 0.4rem;
+            display: block;
         }
 
         .form-control, .form-select {
+            background: #fff;
+            border: 1.5px solid var(--acento-suave);
             border-radius: 12px;
-            border: 1px solid #f8bbd0;
-            padding: 10px;
+            padding: 0.6rem 1rem;
+            font-family: 'Jost', sans-serif;
+            font-size: 0.9rem;
+            color: var(--texto-principal);
+            transition: border-color 0.25s, box-shadow 0.25s;
+            width: 100%;
         }
 
         .form-control:focus, .form-select:focus {
-            border-color: var(--pink-primary);
-            box-shadow: 0 0 0 0.25rem rgba(255, 133, 162, 0.25);
+            outline: none;
+            border-color: var(--acento);
+            box-shadow: 0 0 0 3px rgba(191,84,163,0.12);
         }
 
-        .container {
-            max-width: 1000px;
+        .form-control::placeholder { color: var(--texto-principal); opacity: 0.35; }
+
+        /* ─── BOTONES ─────────────────────────────────────────────── */
+        .btn-add {
+            background: linear-gradient(135deg, var(--primario), var(--acento));
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            padding: 0.62rem 1.4rem;
+            font-family: 'Jost', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            cursor: pointer;
+            transition: opacity 0.25s, transform 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-add:hover {
+            opacity: 0.88;
+            transform: translateY(-2px);
+            color: #fff;
+        }
+
+        .btn-save {
+            background: var(--boton-editar);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 0.35rem 0.9rem;
+            font-family: 'Jost', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+        }
+
+        .btn-save:hover {
+            background: #8a7b52;
+            transform: translateY(-1px);
+            color: #fff;
+        }
+
+        .btn-del {
+            background: var(--boton-eliminar);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 0.35rem 0.9rem;
+            font-family: 'Jost', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: background 0.2s, transform 0.15s;
+        }
+
+        .btn-del:hover {
+            background: #a5704d;
+            transform: translateY(-1px);
+            color: #fff;
+        }
+
+        /* ─── TABLA ──────────────────────────────────────────────── */
+        .tabla-wrap {
+            overflow-x: auto;
+            border-radius: 0 0 20px 20px;
+        }
+
+        table.bc-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--fondo-tarjeta);
+            font-size: 0.87rem;
+        }
+
+        table.bc-table thead th {
+            background: rgba(217,167,203,0.22);
+            color: var(--primario);
+            font-family: 'Jost', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 1rem 1.2rem;
+            border-bottom: 1.5px solid var(--acento-suave);
+            white-space: nowrap;
+        }
+
+        table.bc-table tbody tr {
+            border-bottom: 1px solid rgba(217,167,203,0.25);
+            transition: background 0.18s;
+        }
+
+        table.bc-table tbody tr:last-child { border-bottom: none; }
+        table.bc-table tbody tr:hover { background: rgba(217,167,203,0.10); }
+
+        table.bc-table td {
+            padding: 0.75rem 1.2rem;
+            vertical-align: middle;
+            color: var(--texto-principal);
+        }
+
+        .id-badge {
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--acento);
+            background: rgba(191,84,163,0.08);
+            border-radius: 6px;
+            padding: 0.15rem 0.5rem;
+            letter-spacing: 0.05em;
+        }
+
+        table.bc-table .form-control,
+        table.bc-table .form-select {
+            border-radius: 8px;
+            padding: 0.3rem 0.6rem;
+            font-size: 0.83rem;
+            border: 1.5px solid var(--acento-suave);
+        }
+
+        table.bc-table .form-control:focus,
+        table.bc-table .form-select:focus {
+            border-color: var(--acento);
+            box-shadow: 0 0 0 2px rgba(191,84,163,0.10);
+        }
+
+        .empty-row td {
+            padding: 3.5rem 1rem;
+            text-align: center;
+        }
+
+        .empty-msg {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            font-style: italic;
+            color: var(--primario);
+            opacity: 0.55;
+        }
+
+        .actions-cell {
+            display: flex;
+            gap: 0.4rem;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 0.5rem;
+        }
+
+        /* ─── SEPARADOR ──────────────────────────────────────────── */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 0 2rem;
+            padding-bottom: 1.5rem;
+        }
+
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--acento-suave), transparent);
+        }
+
+        .divider span {
+            font-size: 0.68rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--acento-suave);
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        /* ─── FOOTER ─────────────────────────────────────────────── */
+        .site-footer {
+            text-align: center;
+            padding: 2rem 0 1rem;
+            font-size: 0.78rem;
+            color: var(--texto-principal);
+            opacity: 0.45;
+            letter-spacing: 0.05em;
+        }
+
+        /* ─── ANIMACIÓN ──────────────────────────────────────────── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(18px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero    { animation: fadeUp 0.6s ease both; }
+        .bc-card { animation: fadeUp 0.6s ease both; }
+        .bc-card:nth-child(2) { animation-delay: 0.1s; }
+        .bc-card:nth-child(3) { animation-delay: 0.2s; }
+
+        /* ─── RESPONSIVO ─────────────────────────────────────────── */
+        @media (max-width: 768px) {
+            .bc-card-body { padding: 1.2rem; }
+            .hero { padding: 2rem 1rem 1.5rem; }
+            table.bc-table thead th,
+            table.bc-table td { padding: 0.6rem 0.7rem; }
+            .actions-cell { flex-direction: column; align-items: stretch; gap: 0.3rem; }
         }
     </style>
 </head>
 <body>
 
-    <div class="container py-5">
-        <!-- Encabezado -->
-        <header class="text-center mb-5">
-            <h1>🌸 Boutique Chic 🌸</h1>
-            <p class="text-muted">Gestión de Inventario de Ropa Girlie</p>
-        </header>
+<div class="page-wrap">
 
-        <!-- FORMULARIO PARA AGREGAR PRODUCTO -->
-        <div class="card shadow-sm mb-5">
-            <div class="card-header">
-                <h5 class="mb-0">Añadir Nueva Prenda a la Colección</h5>
-            </div>
-            <div class="card-body p-4">
-                <form action="{% url 'crear_producto' %}" method="POST" class="row g-3">
-                    {% csrf_token %}
+    <!-- ══════════════════ HERO ══════════════════ -->
+    <header class="hero">
+        <span class="hero-eyebrow">Sistema de gestión de inventario</span>
+        <h1 class="hero-title">
+            <svg class="petal" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <ellipse cx="16" cy="8" rx="5" ry="8" fill="#D9A7CB" opacity=".7" transform="rotate(0 16 16)"/>
+                <ellipse cx="16" cy="8" rx="5" ry="8" fill="#BF54A3" opacity=".5" transform="rotate(72 16 16)"/>
+                <ellipse cx="16" cy="8" rx="5" ry="8" fill="#D9A7CB" opacity=".6" transform="rotate(144 16 16)"/>
+                <ellipse cx="16" cy="8" rx="5" ry="8" fill="#975D6C" opacity=".5" transform="rotate(216 16 16)"/>
+                <ellipse cx="16" cy="8" rx="5" ry="8" fill="#D9A7CB" opacity=".65" transform="rotate(288 16 16)"/>
+                <circle cx="16" cy="16" r="4" fill="#F2F2F2"/>
+            </svg>
+            Boutique <em>Chic</em>
+            <svg class="petal" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <ellipse cx="16" cy="8" rx="5" ry="8" fill="#D9A7CB" opacity=".7" transform="rotate(0 16 16)"/>
+                <ellipse cx="16" cy="8" rx="5" ry="8" fill="#BF54A3" opacity=".5" transform="rotate(72 16 16)"/>
+                <ellipse cx="16" cy="8" rx="5" ry="8" fill="#D9A7CB" opacity=".6" transform="rotate(144 16 16)"/>
+                <ellipse cx="16" cy="8" rx="5" ry="8" fill="#975D6C" opacity=".5" transform="rotate(216 16 16)"/>
+                <ellipse cx="16" cy="8" rx="5" ry="8" fill="#D9A7CB" opacity=".65" transform="rotate(288 16 16)"/>
+                <circle cx="16" cy="16" r="4" fill="#F2F2F2"/>
+            </svg>
+        </h1>
+        <p class="hero-sub">Gestión de inventario de ropa — Colección 2026</p>
+    </header>
+
+
+    <!-- ══════════════════ FORMULARIO ══════════════════ -->
+    <div class="bc-card">
+        <div class="bc-card-header rosa">
+            <div class="header-icon">✦</div>
+            <h5>Añadir nueva prenda a la colección</h5>
+        </div>
+        <div class="bc-card-body">
+            <form action="{% url 'crear_producto' %}" method="POST">
+                {% csrf_token %}
+                <div class="row g-3 align-items-end">
                     <div class="col-md-4">
-                        <label class="form-label fw-bold">Nombre del Artículo</label>
-                        <input type="text" name="nombre" class="form-control" placeholder="Ej: Vestido Floral" required>
+                        <label class="form-label">Nombre del artículo</label>
+                        <input type="text" name="nombre" class="form-control"
+                               placeholder="Ej: Vestido Floral" required>
                     </div>
                     <div class="col-md-3">
-                        <label class="form-label fw-bold">Categoría</label>
+                        <label class="form-label">Categoría</label>
                         <select name="categoria" class="form-select" required>
                             <option value="1">Blusas</option>
                             <option value="2">Vestidos</option>
@@ -143,90 +457,38 @@
                         </select>
                     </div>
                     <div class="col-md-2">
-                        <label class="form-label fw-bold">Precio ($)</label>
-                        <input type="number" name="precio" class="form-control" placeholder="00.00" required>
+                        <label class="form-label">Precio ($)</label>
+                        <input type="number" name="precio" class="form-control"
+                               placeholder="00.00" step="0.01" required>
                     </div>
                     <div class="col-md-2">
-                        <label class="form-label fw-bold">Stock</label>
-                        <input type="number" name="stock" class="form-control" placeholder="Cant." required>
+                        <label class="form-label">Stock</label>
+                        <input type="number" name="stock" class="form-control"
+                               placeholder="Cant." required>
                     </div>
                     <div class="col-md-1 d-flex align-items-end">
-                        <button type="submit" class="btn btn-girlie w-100">+</button>
+                        <button type="submit" class="btn-add w-100">＋</button>
                     </div>
-                </form>
-            </div>
-        </div>
-
-        <!-- TABLA DEL CRUD (LISTA, EDITAR Y ELIMINAR) -->
-        <div class="card shadow-sm">
-            <div class="card-header" style="background: linear-gradient(45deg, #ce93d8, #ba68c8) !important;">
-                <h5 class="mb-0">Lista de Existencias (Closet Virtual)</h5>
-            </div>
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead>
-                            <tr>
-                                <th class="ps-4">ID</th>
-                                <th>Artículo</th>
-                                <th>Categoría</th>
-                                <th>Precio</th>
-                                <th>Stock</th>
-                                <th class="text-center pe-4">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for prod in productos %}
-                            <tr>
-                                <!-- Para solucionar el error, toda la fila se convierte en un solo formulario bien estructurado -->
-                                <td class="ps-4 text-muted small">#{{ prod.id }}</td>
-                                <td colspan="5">
-                                    <form action="{% url 'editar_producto' prod.id %}" method="POST" class="row g-2 align-items-center m-0">
-                                        {% csrf_token %}
-                                        <div class="col">
-                                            <input type="text" name="nombre" value="{{ prod.nombre }}" class="form-control form-control-sm">
-                                        </div>
-                                        <div class="col">
-                                            <select name="categoria" class="form-select form-select-sm">
-                                                <!-- Opciones fijas vinculadas de manera segura al ID guardado -->
-                                                <option value="1" {% if prod.categoria.id == 1 %}selected{% endif %}>Blusas</option>
-                                                <option value="2" {% if prod.categoria.id == 2 %}selected{% endif %}>Vestidos</option>
-                                                <option value="3" {% if prod.categoria.id == 3 %}selected{% endif %}>Pantalones</option>
-                                                <option value="4" {% if prod.categoria.id == 4 %}selected{% endif %}>Accesorios</option>
-                                                <option value="5" {% if prod.categoria.id == 5 %}selected{% endif %}>Otros</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-auto">
-                                            <input type="number" name="precio" value="{{ prod.precio }}" class="form-control form-control-sm" style="width: 90px;">
-                                        </div>
-                                        <div class="col-auto">
-                                            <input type="number" name="stock" value="{{ prod.stock }}" class="form-control form-control-sm" style="width: 80px;">
-                                        </div>
-                                        <div class="col-auto text-center pe-2">
-                                            <button type="submit" class="btn btn-sm btn-update px-3">Guardar</button>
-                                            <a href="{% url 'eliminar_producto' prod.id %}" class="btn btn-sm btn-delete px-3">Borrar</a>
-                                        </div>
-                                    </form>
-                                </td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="6" class="text-center py-5 text-muted">🌸 Aún no hay prendas registradas en el closet virtual. 🌸</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
                 </div>
-            </div>
+            </form>
         </div>
-        
-        <!-- Footer -->
-        <footer class="text-center mt-5 text-muted">
-            <small>&copy; 2026 Boutique Chic - Estilo y Elegancia</small>
-        </footer>
     </div>
 
-    <!-- Bootstrap Bundle JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<tr>
+    <td><span class="id-badge">#{{ prod.id }}</span></td>
+    <td colspan="5"> 
+        <form ...> ... </form>
+    </td>
+</tr>
+    <!-- ══════════════════ FOOTER ══════════════════ -->
+    <footer class="site-footer">
+        <span>&copy; 2026 Boutique Chic — Estilo y Elegancia</span>
+    </footer>
+
+</div>
+
+<!-- Bootstrap Bundle JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
